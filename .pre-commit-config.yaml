@@ -1,4 +1,4 @@
-exclude: ^(example/|.venv/|code-index.egg-info/)
+exclude: ^(test_data/|.venv/|code-index.egg-info/)
 
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
@@ -13,6 +13,8 @@ repos:
     hooks:
       - id: uv-sync
         args: ["--locked", "--all-packages", "--all-groups"]
+      - id: uv-export
+        args: ["--frozen", "--all-groups", "--no-hashes", "--output-file=requirements.txt"]
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.12.8
