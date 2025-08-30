@@ -1,6 +1,7 @@
 from pathlib import Path
 from typing import Optional
 
+from tqdm import tqdm
 from tree_sitter import Tree
 
 from .index.base import BaseIndex, PersistStrategy
@@ -247,7 +248,7 @@ class CodeIndexer:
         self._process_definitions(tree, source_bytes, file_path, self._processor)
         self._process_references(tree, source_bytes, file_path, self._processor)
 
-    def index_project(self, project_path: Path):
+    def index_project(self, project_path: Path, sub_directories: list[Path] | None = None):
         """Recursively indexes all supported files in a project directory.
 
         This method walks through the entire project directory tree and indexes
@@ -257,6 +258,9 @@ class CodeIndexer:
         Args:
             project_path: The root directory path of the project to be indexed.
                 All subdirectories will be recursively processed.
+            sub_directories: Optional list of subdirectory paths (relative to the
+                project root) to limit indexing to. If None, the entire project
+                directory is processed.
 
         Note:
             Files with unsupported extensions are automatically skipped.
@@ -269,7 +273,21 @@ class CodeIndexer:
                 indexer.index_project(Path("/path/to/project"))
         """
         logger.info(f"Starting to index project at: {project_path}")
-        for file_path in project_path.rglob("*"):
+        files_to_index = []
+        if sub_directories:
+            for sub_dir in sub_directories:
+                full_sub_dir = project_path / sub_dir
+                if not full_sub_dir.is_dir():
+                    if full_sub_dir.is_file():
+                        # add the file to the list
+                        files_to_index.append(full_sub_dir)
+                files_to_index.extend(full_sub_dir.rglob("*"))
+        else:
+            files_to_index = list(project_path.rglob("*"))
+
+        logger.info(f"Found {len(files_to_index)} files to index.")
+
+        for file_path in tqdm(files_to_index):
             if not file_path.is_file():
                 continue
             if file_path.suffix not in self._processor.extensions:
