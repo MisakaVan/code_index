@@ -22,13 +22,7 @@ Features
 Quick Start
 -----------
 
-Install the package:
-
-(Note: Working In Progress)
-
-.. code-block:: bash
-
-   pip install code-index
+Check the project `README.md` for installation instructions.
 
 Basic usage:
 

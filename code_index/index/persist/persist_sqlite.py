@@ -208,6 +208,10 @@ class SqlitePersistStrategy(PersistStrategy):
 
     Stores index data in a SQLite database with proper relational structure.
     Supports both file-based and in-memory databases.
+
+    Note:
+        Currently does not support the LLM Note feature. Check `models.py` for details.
+
     """
 
     def __init__(self):
