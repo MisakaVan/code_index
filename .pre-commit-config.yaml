@@ -2,14 +2,14 @@ exclude: ^(test_data/|.venv/|code-index.egg-info/)
 
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v5.0.0
+    rev: v6.0.0
     hooks:
       - id: end-of-file-fixer     # 确保文件以一个空行结尾
       - id: check-yaml            # 检查 YAML 文件语法
       - id: check-toml            # 检查 TOML 文件语法
 
   - repo: https://github.com/astral-sh/uv-pre-commit
-    rev: 0.8.4
+    rev: 0.11.28
     hooks:
       - id: uv-sync
         args: ["--locked", "--all-packages", "--all-groups"]
@@ -17,7 +17,7 @@ repos:
         args: ["--frozen", "--all-groups", "--no-hashes", "--output-file=requirements.txt"]
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.12.8
+    rev: v0.15.21
     hooks:
       # Run the linter
       - id: ruff-check
